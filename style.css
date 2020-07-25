@@ -5,8 +5,8 @@
 }
 
 :root {
-  --primary-color: dodgerblue;
-  --select-color: dodgerblue;
+  --primary-color: linear-gradient(to right, #5433ff, dodgerblue);
+  --select-color: linear-gradient(to right, #5433ff, dodgerblue);
   --success: rgb(15, 158, 2);
   --danger: rgb(214, 23, 23);
 }
