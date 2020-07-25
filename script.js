@@ -32,26 +32,32 @@ const wrongFormat = [];
 
 // Scroll
 
+// Display Game Page
+function showGamePage() {
+  gamePage.hidden = false;
+  countdownPage.hidden = true;
+}
+
 // Get Random Number up to a max number
 function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max)); 
+  return Math.floor(Math.random() * Math.floor(max));
 }
 
 // Create Correct/Incorrect Random Equations
 function createEquations() {
   // Randomly choose how many correct equations there should be
   const correctEquations = getRandomInt(questionAmount);
-  console.log('Correct Equations: ', correctEquations);
+  console.log("Correct Equations: ", correctEquations);
   // Set amount of wrong equations
   const wrongEquations = questionAmount - correctEquations;
-  console.log('Wrong Equations: ', wrongEquations);
+  console.log("Wrong Equations: ", wrongEquations);
   // Loop through, multiply random numbers up to 9, push to array
   for (let i = 0; i < correctEquations; i++) {
-    firstNumber = getRandomInt(9); 
+    firstNumber = getRandomInt(9);
     secondNumber = getRandomInt(9);
     const equationValue = firstNumber * secondNumber;
     const equation = `${firstNumber} x ${secondNumber} = ${equationValue}`;
-    equationObject = { value: equation, evaluated: 'true' };
+    equationObject = { value: equation, evaluated: "true" };
     equationsArray.push(equationObject);
   }
   // Loop through, mess with the equation results, push to array
@@ -64,42 +70,57 @@ function createEquations() {
     wrongFormat[2] = `${firstNumber + 1} x ${secondNumber} = ${equationValue}`;
     const formatChoice = getRandomInt(3);
     const equation = wrongFormat[formatChoice];
-    equationObject = { value: equation, evaluated: 'false' };
+    equationObject = { value: equation, evaluated: "false" };
     equationsArray.push(equationObject);
   }
   shuffle(equationsArray);
-  console.log('Equations Array: ', equationsArray);
+}
+
+// Add Equations to DOM
+function equationsToDOM() {
+  equationsArray.forEach((equation) => {
+    // Item
+    const item = document.createElement("div");
+    item.classList.add("item");
+    // Equation Text
+    const equationText = document.createElement("h1");
+    equationText.textContent = equation.value;
+    // Append
+    item.appendChild(equationText);
+    itemContainer.appendChild(item);
+  });
 }
 
 // Dynamically adding correct/incorrect equations
-// function populateGamePage() {
-//   // Reset DOM, Set Blank Space Above
-//   itemContainer.textContent = '';
-//   // Spacer
-//   const topSpacer = document.createElement('div');
-//   topSpacer.classList.add('height-240');
-//   // Selected Item
-//   const selectedItem = document.createElement('div');
-//   selectedItem.classList.add('selected-item');
-//   // Append
-//   itemContainer.append(topSpacer, selectedItem);
+function populateGamePage() {
+  // Reset DOM, Set Blank Space Above
+  itemContainer.textContent = "";
+  // Spacer
+  const topSpacer = document.createElement("div");
+  topSpacer.classList.add("height-240");
+  // Selected Item
+  const selectedItem = document.createElement("div");
+  selectedItem.classList.add("selected-item");
+  // Append
+  itemContainer.append(topSpacer, selectedItem);
 
-//   // Create Equations, Build Elements in DOM
-
-//   // Set Blank Space Below
-//   const bottomSpacer = document.createElement('div');
-//   bottomSpacer.classList.add('height-500');
-//   itemContainer.appendChild(bottomSpacer);
-// }
+  // Create Equations, Build Elements in DOM
+  createEquations();
+  equationsToDOM();
+  // Set Blank Space Below
+  const bottomSpacer = document.createElement("div");
+  bottomSpacer.classList.add("height-500");
+  itemContainer.appendChild(bottomSpacer);
+}
 
 // Display 3, 2, 1, GO!
 function countdownStart() {
-  countdown.textContent = '3';
+  countdown.textContent = "3";
   setTimeout(() => {
-    countdown.textContent = '2';
+    countdown.textContent = "2";
   }, 1000);
   setTimeout(() => {
-    countdown.textContent = '1';
+    countdown.textContent = "1";
   }, 2000);
   setTimeout(() => {
     countdown.textContent = "GO!";
@@ -112,7 +133,8 @@ function showCountdown() {
     countdownPage.hidden = false;
     splashPage.hidden = true;
     countdownStart();
-    createEquations()
+    populateGamePage();
+    setTimeout(showGamePage, 4000);
   }
 }
 
